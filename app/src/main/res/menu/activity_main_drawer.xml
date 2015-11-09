@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Household">
+        <menu>
+            <item
+                android:id="@+id/nav_roommates"
+                android:title="Roommates" />
+            <item
+                android:id="@+id/nav_beacons"
+                android:title="Setup Rooms" />
+
+            <!--<item-->
+                <!--android:id="@+id/nav_notes"-->
+                <!--android:title="Notes" />-->
+        </menu>
+    </item>
+
+    <item android:title="Application">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:title="Settings" />
+        </menu>
+    </item>
+
+    <item android:title="Marvin">
+        <menu>
+            <item
+                android:id="@+id/nav_log"
+                android:title="Server Log" />
+            <item
+                android:id="@+id/nav_speak"
+                android:visible="true"
+                android:title="Speak" />
+        </menu>
+    </item>
+
+</menu>
