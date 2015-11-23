@@ -1,7 +1,12 @@
 package com.futurehax.marvin;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.database.Cursor;
+import android.net.Uri;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
 
 import com.estimote.sdk.EstimoteSDK;
 import com.futurehax.marvin.api.SaveRoomTask;
@@ -41,5 +46,9 @@ public class UberEstimoteApplication extends Application {
                         mObserver);
     }
 
+    public void stopListener() {
+        getContentResolver()
+                .unregisterContentObserver(mObserver);
+    }
 }
 

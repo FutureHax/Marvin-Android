@@ -24,7 +24,7 @@ public class CheckLogTask extends BasicTask {
     protected String doInBackground(Void... params) {
         try {
             String attempt = mUrlGenerator.getRequest(mUrlGenerator.generate(UrlGenerator.LOG, Integer.toString(mCount)));
-            return attempt == null ? "false" : attempt.split("\n")[0];
+            return attempt == null ? "false" : attempt.trim();
         } catch (Exception e) {
             return "Failed";
         }

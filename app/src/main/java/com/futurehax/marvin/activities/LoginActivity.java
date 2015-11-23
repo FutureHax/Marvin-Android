@@ -5,30 +5,28 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ViewFlipper;
 
 import com.futurehax.marvin.PreferencesProvider;
 import com.futurehax.marvin.R;
-import com.futurehax.marvin.UberEstimoteApplication;
 import com.futurehax.marvin.api.AuthenticateTask;
 import com.futurehax.marvin.google_api.GoogleApiProvider;
 import com.futurehax.marvin.google_api.ILoginAttempt;
 import com.futurehax.marvin.service.RegistrationIntentService;
 import com.google.android.gms.common.SignInButton;
+import com.greysonparrelli.permiso.Permiso;
+import com.greysonparrelli.permiso.PermisoActivity;
 
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements ILoginAttempt {
+public class LoginActivity extends PermisoActivity implements ILoginAttempt {
 
     private static final int REQUEST_CODE_ACCOUNT = 0;
     private static final int REQUEST_CODE_STORAGE = 1;
@@ -37,17 +35,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginAttempt {
     private SignInButton btnSignIn;
     GoogleApiProvider mGoogleApiProvider;
     int failCount = 0;
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions,
-                                           int[] grantResults) {
-        if (requestCode == REQUEST_CODE_ACCOUNT) {
-            handleGivenPermissions();
-        } else if (requestCode == REQUEST_CODE_STORAGE) {
-            requestAccessToSD();
-        }
-    }
+    boolean hasPerms = false;
 
     protected void onStop() {
         super.onStop();
@@ -67,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginAttempt {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Set up the login form.
         flippy = (ViewFlipper) findViewById(R.id.flippy);
 
         flippy.setDisplayedChild(1);
@@ -76,15 +63,25 @@ public class LoginActivity extends AppCompatActivity implements ILoginAttempt {
 
         mGoogleApiProvider = GoogleApiProvider.getInstance(this);
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.GET_ACCOUNTS)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this, new String[]{android.Manifest.permission.GET_ACCOUNTS},
-                    REQUEST_CODE_ACCOUNT);
-        } else {
-            // permission has been granted, continue as usual
-            handleGivenPermissions();
-        }
+        Permiso.getInstance().requestPermissions(new Permiso.IOnPermissionResult() {
+                                                     @Override
+                                                     public void onPermissionResult(Permiso.ResultSet resultSet) {
+                                                         if (resultSet.areAllPermissionsGranted()) {
+                                                             handleGivenPermissions();
+                                                         } else {
+                                                             showUnable();
+                                                         }
+                                                     }
+
+                                                     @Override
+                                                     public void onRationaleRequested(Permiso.IOnRationaleProvided callback, String... permissions) {
+                                                         Permiso.getInstance().showRationaleInDialog("Requested Permissions",
+                                                                 getString(R.string.permission_rationale), null, callback);
+                                                     }
+                                                 }, Manifest.permission.GET_ACCOUNTS,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
     }
 
     private void handleGivenPermissions() {
@@ -93,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginAttempt {
 
     protected void onStart() {
         super.onStart();
-        if (new PreferencesProvider(this).getTokenIsSent()) {
+        if (new PreferencesProvider(this).getTokenIsSent() && hasPerms) {
             mGoogleApiProvider.signIn(LoginActivity.this, LoginActivity.this);
         }
     }
@@ -107,29 +104,30 @@ public class LoginActivity extends AppCompatActivity implements ILoginAttempt {
         }
     };
 
+    @Override
+    public void onResult(boolean success) {
+        if (success) {
+            if (new PreferencesProvider(this).getHost() == null) {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            } else {
+                new AuthenticateTask(this, flippy).execute();
+            }
+        } else {
+            showUnable();
+        }
+    }
+
     BroadcastReceiver mRegistrationBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(RegistrationIntentService.REGISTRATION_COMPLETE)) {
-                requestAccessToSD();
+                mGoogleApiProvider.signIn(LoginActivity.this, LoginActivity.this);
             } else {
                 showUnable();
             }
         }
     };
-
-    private void requestAccessToSD() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_CODE_STORAGE);
-        } else {
-            ((UberEstimoteApplication) getApplication()).startupListener();
-            flippy.setDisplayedChild(0);
-        }
-    }
-
 
     @Override
     protected void onResume() {
@@ -146,23 +144,10 @@ public class LoginActivity extends AppCompatActivity implements ILoginAttempt {
         super.onPause();
     }
 
-    @Override
-    public void onResult(boolean success) {
-        if (success) {
-            if (new PreferencesProvider(this).getHost() == null) {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-            } else {
-                new AuthenticateTask(this, flippy).execute();
-            }
-        } else {
-           showUnable();
-        }
-    }
 
     private void showUnable() {
         failCount = failCount + 1;
-        Snackbar.make(findViewById(android.R.id.content), "Unable to login", Snackbar.LENGTH_LONG)
+        Snackbar.make(btnSignIn, "Unable to login", Snackbar.LENGTH_LONG)
                 .setAction(failCount < 3 ? "Retry" : "Skip", new OnClickListener() {
                     @Override
                     public void onClick(View v) {

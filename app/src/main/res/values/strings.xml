@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">Marvin</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -16,8 +16,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
+    <string name="permission_rationale">-Location is required for using Bluetooth\n-External Storage Access is needed for backing up data\n-Contacts is needed to allow for Google + login"
     </string>
     <string name="title_activity_settings">Settings</string>
 
@@ -32,4 +31,11 @@
     <string name="btn_revoke_access">Revoke</string>
     <string name="pref_title_backup">Enable media backup</string>
 
+
+    <!-- Default title for color picker dialog [CHAR LIMIT=30] -->
+    <string name="color_picker_default_title">Select a Color</string>
+    <!-- Content description for a color square. -->
+    <string name="color_swatch_description">Color <xliff:g id="color_index" example="14">%1$d</xliff:g></string>
+    <!-- Content description for a selected color square. -->
+    <string name="color_swatch_description_selected">Color <xliff:g id="color_index" example="14">%1$d</xliff:g> selected</string>
 </resources>

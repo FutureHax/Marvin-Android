@@ -7,14 +7,49 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name ="android:windowBackground">@color/window_bg</item>
-
+        <item name="preferenceTheme">@style/Theme.WtfPreference</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <color name="window_bg">#EEEEEE</color>
+
+    <style name="NumberPickerUpButton" parent="@android:style/Widget.ImageButton">
+        <item name="android:background">@drawable/numberpicker_up_btn</item>
+        <item name="android:paddingTop">22dip</item>
+        <item name="android:paddingBottom">22dip</item>
+    </style>
+
+    <style name="NumberPickerDownButton" parent="@android:style/Widget.ImageButton">
+        <item name="android:background">@drawable/numberpicker_down_btn</item>
+        <item name="android:paddingTop">22dip</item>
+        <item name="android:paddingBottom">22dip</item>
+    </style>
+
+    <style name="NumberPickerInputText" parent="@android:style/Widget.EditText">
+        <item name="android:textAppearance">@style/NumberPickerInputText</item>
+        <item name="android:gravity">center</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:background">@drawable/numberpicker_input</item>
+    </style>
+
+
+    <style name="Theme.WtfPreference" parent="@style/PreferenceThemeOverlay">
+        <item name="preferenceScreenStyle">@style/Preference.PreferenceScreen</item>
+        <item name="preferenceFragmentStyle">@style/PreferenceFragment</item>
+        <item name="preferenceCategoryStyle">@style/Preference.Category</item>
+        <item name="preferenceStyle">@style/Preference</item>
+        <item name="preferenceInformationStyle">@style/Preference.Information</item>
+        <item name="checkBoxPreferenceStyle">@style/Preference.CheckBoxPreference</item>
+        <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat</item>
+        <item name="dialogPreferenceStyle">@style/Preference.DialogPreference</item>
+        <item name="editTextPreferenceStyle">@style/Preference.DialogPreference.EditTextPreference</item>
+        <item name="preferenceFragmentListStyle">@style/PreferenceFragmentList</item>
+    </style>
 </resources>

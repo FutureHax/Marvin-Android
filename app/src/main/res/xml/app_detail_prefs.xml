@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="Alert Customization">
+
+        <it.gmariotti.android.example.colorpicker.calendarstock.ColorPickerPreference
+            android:defaultValue="@android:color/white"
+            android:key="calendar_colorkey"
+            android:persistent="false"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="Select an alert color for this app"
+            android:title="Alert Color"
+            app:cal_itemLayout="@layout/calendar_grid_item_color"
+            app:cal_numColumns="4" />
+
+        <com.futurehax.marvin.NumberPickerPreference
+            android:defaultValue="3"
+            android:persistent="false"
+            android:key="number_picker_key"
+            android:summary="Count summary"
+            android:title="Count Title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="bulbs"
+        android:title="Group Selection">
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
