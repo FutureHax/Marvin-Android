@@ -17,10 +17,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.futurehax.marvin.PreferencesProvider;
@@ -95,13 +97,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        LinearLayout headerView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.nav_header_main, null);
+        navigationView.addHeaderView(headerView);
 
         mPreferences = new PreferencesProvider(this);
 
-        userName = (TextView) findViewById(R.id.username);
+        userName = (TextView) headerView.findViewById(R.id.username);
         userName.setText(String.format("Welcome %s", mPreferences.getName().split(" ")[0]));
 
-        Ion.with((ImageView) findViewById(R.id.profile_image))
+        Ion.with((ImageView) headerView.findViewById(R.id.profile_image))
                 .placeholder(R.drawable.ic_launcher)
                 .error(R.drawable.ic_list)
                 .load(mPreferences.getPhotoUrl());
