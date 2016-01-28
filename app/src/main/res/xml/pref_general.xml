@@ -12,6 +12,12 @@
         android:title="@string/pref_title_backup"
         android:persistent="true"/>
 
+    <CheckBoxPreference
+        android:key="enable_tracking_lights"
+        android:defaultValue="false"
+        android:title="@string/pref_title_tracking_lights"
+        android:persistent="true"/>
+
     <EditTextPreference
         android:key="host"
         android:title="Server Hostname"

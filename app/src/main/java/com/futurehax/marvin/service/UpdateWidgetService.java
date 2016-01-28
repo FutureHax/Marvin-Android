@@ -6,14 +6,12 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.futurehax.marvin.MyWidgetProvider;
-import com.futurehax.marvin.PreferencesProvider;
+import com.futurehax.marvin.manager.MyWidgetProvider;
+import com.futurehax.marvin.manager.PreferencesProvider;
 import com.futurehax.marvin.R;
-import com.futurehax.marvin.UberBeaconManager;
-import com.futurehax.marvin.activities.LoginActivity;
+import com.futurehax.marvin.manager.UberBeaconManager;
 
 public class UpdateWidgetService extends Service {
     @Override

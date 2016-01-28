@@ -1,4 +1,4 @@
-package com.futurehax.marvin;
+package com.futurehax.marvin.adapters;
 
 import android.content.ContentValues;
 import android.content.Context;

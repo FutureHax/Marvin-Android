@@ -1,4 +1,4 @@
-package com.futurehax.marvin;
+package com.futurehax.marvin.receivers;
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;

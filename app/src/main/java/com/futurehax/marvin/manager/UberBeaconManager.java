@@ -1,12 +1,12 @@
-package com.futurehax.marvin;
+package com.futurehax.marvin.manager;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.futurehax.marvin.models.UberMapping;
 import com.futurehax.marvin.models.BeaconDataStream;
 import com.futurehax.marvin.models.BeaconIdentifier;
 import com.futurehax.marvin.models.UberBeacon;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.futurehax.marvin;
+package com.futurehax.marvin.widgets;
 
 import android.content.Context;
 import android.os.Handler;
@@ -33,6 +33,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+
+import com.futurehax.marvin.R;
 
 import java.util.Locale;
 

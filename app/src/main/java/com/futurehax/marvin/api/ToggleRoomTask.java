@@ -1,15 +1,15 @@
 package com.futurehax.marvin.api;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
 
-import com.futurehax.marvin.UrlGenerator;
+import com.futurehax.marvin.manager.UberBeaconManager;
 import com.futurehax.marvin.models.UberRoom;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 public class ToggleRoomTask extends BasicTask {
     UberRoom room;
@@ -21,21 +21,24 @@ public class ToggleRoomTask extends BasicTask {
 
     @Override
     protected String doInBackground(Void... params) {
+        if (!UberBeaconManager.getInstance(mContext).getIsHome()) {
+            return "Failed";
+        }
         try {
-            String attempt = mUrlGenerator.getRequest(mUrlGenerator.generate(UrlGenerator.TOGGLE),
-                    mPreferences.getName().split(" ")[0] + "&user");
+            JSONObject o = new JSONObject();
+            o.put("user", mPreferences.getName().split(" ")[0]);
+            String attempt = mUrlGenerator.getBlockingRequestWithJson(mUrlGenerator.generate(UrlGenerator.TOGGLE), o);
             return attempt == null ? "false" : attempt;
-        } catch (Exception e) {
+        } catch (IllegalStateException | ExecutionException | JSONException | InterruptedException e) {
             e.printStackTrace();
             return "Failed";
         }
+
     }
 
     @Override
     protected void onPostExecute(final String success) {
-//        if (!success.equals("false")) {
-            Log.d("THE TOGGLE RESULT", success);
-//        }
+        Log.d("THE TOGGLE RESULT", success);
     }
 
 }

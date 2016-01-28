@@ -1,10 +1,12 @@
-package com.futurehax.marvin;
+package com.futurehax.marvin.manager;
 
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+
+import com.futurehax.marvin.receivers.AccelerometerListener;
 
 import java.util.List;
 
@@ -13,10 +15,7 @@ public class AccelerometerManager {
     private static Context aContext = null;
 
 
-    private static Sensor sensor;
     private static SensorManager sensorManager;
-    // you could use an OrientationListener array instead
-    // if you plans to use more than one listener
     private static AccelerometerListener listener;
 
     /**
@@ -45,6 +44,7 @@ public class AccelerometerManager {
                 sensorManager.unregisterListener(sensorEventListener);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -64,7 +64,7 @@ public class AccelerometerManager {
                 List<Sensor> sensors = sensorManager.getSensorList(
                         Sensor.TYPE_ACCELEROMETER);
 
-                supported = new Boolean(sensors.size() > 0);
+                supported = sensors.size() > 0;
 
 
             } else {
@@ -84,15 +84,11 @@ public class AccelerometerManager {
         sensorManager = (SensorManager) aContext.
                 getSystemService(Context.SENSOR_SERVICE);
 
-        // Take all sensors in device
         List<Sensor> sensors = sensorManager.getSensorList(
                 Sensor.TYPE_ACCELEROMETER);
 
         if (sensors.size() > 0) {
-
-            sensor = sensors.get(0);
-
-            // Register Accelerometer Listener
+            Sensor sensor = sensors.get(0);
             running = sensorManager.registerListener(
                     sensorEventListener, sensor,
                     SensorManager.SENSOR_DELAY_GAME);
@@ -117,10 +113,6 @@ public class AccelerometerManager {
                 }
 
                 public void onSensorChanged(SensorEvent event) {
-                    // use the event timestamp as reference
-                    // so the manager precision won't depends
-                    // on the AccelerometerListener implementation
-                    // processing time
                     x = event.values[0];
                     y = event.values[1];
                     z = event.values[2];

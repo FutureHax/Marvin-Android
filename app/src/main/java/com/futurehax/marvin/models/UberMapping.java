@@ -1,7 +1,4 @@
-package com.futurehax.marvin;
-
-import com.futurehax.marvin.models.BeaconDataStream;
-import com.futurehax.marvin.models.UberBeacon;
+package com.futurehax.marvin.models;
 
 /**
  * Created by FutureHax on 10/27/15.
@@ -11,7 +8,7 @@ public class UberMapping {
     public final UberBeacon beacon;
     BeaconDataStream dataStream;
 
-    public void updateDateStream() {
+    public void updateDataStream() {
         dataStream.addToStream(distance);
     }
 

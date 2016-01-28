@@ -1,4 +1,4 @@
-package com.futurehax.marvin; /**
+package com.futurehax.marvin.widgets; /**
  *               DO WHAT YOU WANT TO PUBLIC LICENSE
  *                    Version 2, December 2004
  * 

@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.futurehax.marvin.activities.MainActivity;
-import com.futurehax.marvin.PreferencesProvider;
+import com.futurehax.marvin.manager.PreferencesProvider;
 import com.futurehax.marvin.R;
 import com.google.android.gms.gcm.GcmListenerService;
 

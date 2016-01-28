@@ -30,6 +30,7 @@
     <string name="btn_logout_from_google">Sign Out</string>
     <string name="btn_revoke_access">Revoke</string>
     <string name="pref_title_backup">Enable media backup</string>
+    <string name="pref_title_tracking_lights">Enable light tracking</string>
 
 
     <!-- Default title for color picker dialog [CHAR LIMIT=30] -->

@@ -1,11 +1,11 @@
-package com.futurehax.marvin;
+package com.futurehax.marvin.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.futurehax.marvin.models.BeaconMap;
+import com.futurehax.marvin.models.UberMapping;
 import com.futurehax.marvin.models.UberRoom;
 import com.futurehax.marvin.service.HeartBeatService;
 
@@ -54,6 +54,7 @@ public class PreferencesProvider {
     public boolean getBackupEnabled() {
         return prefs.getBoolean("enable_backup", true);
     }
+
     public boolean getAlertsEnabled() {
         return prefs.getBoolean("enable_alerts", true);
     }
@@ -158,8 +159,10 @@ public class PreferencesProvider {
     public String getPhotoUrl() {
         return prefs.getString("photoUrl", null);
     }
+
     public String getHost() {
-        return prefs.getString("host", null);
+//        return prefs.getString("host", null);
+        return "marvin.boldlygoingnowhere.org:3000";
     }
 
     public boolean getHasMoved() {
@@ -172,5 +175,17 @@ public class PreferencesProvider {
 
     public void setImageUploaded(File image, boolean hasBeenPushed) {
         prefs.edit().putBoolean(image.getName() + "_uploaded", hasBeenPushed).apply();
+    }
+
+    public String getGoogleAuthToken() {
+        return prefs.getString("google_auth", null);
+    }
+
+    public void setGoogleAuthToken(String token) {
+        prefs.edit().putString("google_auth", token).apply();
+    }
+
+    public boolean getHasTrackingEnabled() {
+        return prefs.getBoolean("enable_tracking_lights", false);
     }
 }

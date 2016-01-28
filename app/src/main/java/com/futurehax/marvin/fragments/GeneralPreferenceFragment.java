@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.support.v4.preference.PreferenceFragment;
 
-import com.futurehax.marvin.PreferencesProvider;
 import com.futurehax.marvin.R;
 import com.futurehax.marvin.UberEstimoteApplication;
 import com.futurehax.marvin.activities.LoginActivity;
+import com.futurehax.marvin.manager.PreferencesProvider;
+import com.futurehax.marvin.service.HeartBeatService;
 
 public class GeneralPreferenceFragment extends PreferenceFragment {
     @Override
@@ -44,6 +45,14 @@ public class GeneralPreferenceFragment extends PreferenceFragment {
                 } else {
                     app.stopListener();
                 }
+                return true;
+            }
+        });
+
+        findPreference("enable_tracking_lights").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                HeartBeatService.sendHeartBeat(preference.getContext());
                 return true;
             }
         });

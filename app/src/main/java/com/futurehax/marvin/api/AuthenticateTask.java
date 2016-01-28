@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.ViewFlipper;
 
-import com.futurehax.marvin.UrlGenerator;
 import com.futurehax.marvin.activities.MainActivity;
 import com.futurehax.marvin.service.RegistrationIntentService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 public class AuthenticateTask extends BasicTask {
 
@@ -19,15 +23,22 @@ public class AuthenticateTask extends BasicTask {
     @Override
     protected String doInBackground(Void... params) {
         try {
-            String attempt = mUrlGenerator.getRequest(mUrlGenerator.generate(UrlGenerator.REGISTER),
-                    mPreferences.getEmail() + "&email",
-                    mPreferences.getName() + "&name",
-                    mPreferences.getId() + "&profile_id",
-                    mPreferences.getToken() + "&gcm");
+            JSONObject data = new JSONObject();
+            data.put("email", mPreferences.getEmail());
+            data.put("name", mPreferences.getName());
+            data.put("profile_id", mPreferences.getId());
+            data.put("gcm", mPreferences.getToken());
+            data.put("enable_tracking", mPreferences.getHasTrackingEnabled());
+            String attempt = mUrlGenerator.getBlockingRequestWithJson(mUrlGenerator.generate(UrlGenerator.REGISTER), data);
             return attempt == null ? "Failed" : attempt;
-        } catch (Exception e) {
+        } catch (IllegalStateException | JSONException e) {
             return "Failed";
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
+        return "Failed";
     }
 
 

@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 
-import com.futurehax.marvin.AccelerometerListener;
-import com.futurehax.marvin.AccelerometerManager;
-import com.futurehax.marvin.PreferencesProvider;
+import com.futurehax.marvin.receivers.AccelerometerListener;
+import com.futurehax.marvin.manager.AccelerometerManager;
+import com.futurehax.marvin.manager.PreferencesProvider;
 
 public class AccelerometerListenerService extends Service implements AccelerometerListener {
     private static final float TOLERANCE = 4.0f;

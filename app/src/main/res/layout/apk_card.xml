@@ -37,7 +37,7 @@
                 android:layout_below="@+id/appicon"
                 android:layout_height="35dp">
 
-                <com.futurehax.marvin.AutoResizeTextView
+                <com.futurehax.marvin.widgets.AutoResizeTextView
                     android:id="@+id/appname"
                     android:layout_centerInParent="true"
                     android:layout_width="wrap_content"

@@ -3,6 +3,7 @@ package com.futurehax.marvin.fragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,33 +12,39 @@ import android.view.ViewGroup;
 import android.widget.ViewFlipper;
 
 import com.futurehax.marvin.R;
-import com.futurehax.marvin.api.RoommateTask;
+import com.futurehax.marvin.adapters.RoommateAdapter;
+import com.futurehax.marvin.api.UrlGenerator;
+import com.futurehax.marvin.models.Roommate;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.koushikdutta.async.future.FutureCallback;
 
-public class RoommateFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class RoommateFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     RecyclerView recyclerView;
     View root;
     ViewFlipper flippy;
+    private SwipeRefreshLayout swipeLayout;
+
 
     Handler handy = new Handler();
-
-    Runnable updateRunnable = new Runnable() {
+    Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            getRoommates();
-            handy.postDelayed(this, 1000);
+            handy.removeCallbacks(runnable);
+            fetchRoommates();
+            handy.postDelayed(this, 5000);
         }
     };
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        handy.removeCallbacks(updateRunnable);
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
-        handy.removeCallbacks(updateRunnable);
+        handy.removeCallbacks(runnable);
     }
 
     @Override
@@ -53,6 +60,10 @@ public class RoommateFragment extends Fragment {
         getActivity().setTitle("Roommates");
         root = inflater.inflate(R.layout.content_list, container, false);
         flippy = (ViewFlipper) root.findViewById(R.id.flippy);
+
+        swipeLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         return root;
     }
 
@@ -62,11 +73,37 @@ public class RoommateFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
 
-        handy.post(updateRunnable);
+        handy.post(runnable);
     }
 
-    public void getRoommates() {
-        new RoommateTask(getActivity(), flippy, recyclerView).execute();
+    private void fetchRoommates() {
+        UrlGenerator mUrlGenerator = new UrlGenerator(getActivity());
+        mUrlGenerator.getRequestWithJson(mUrlGenerator.generate(UrlGenerator.ROOMMATES)).setCallback(new FutureCallback<String>() {
+            @Override
+            public void onCompleted(Exception e, String success) {
+                if (success != null &&
+                        !success.equals("Failed") &&
+                        !success.equals("Unauthorized")) {
+                    JsonArray result = new JsonParser().parse(success).getAsJsonArray();
+
+                    final ArrayList<Roommate> roommates = new ArrayList<>();
+                    for (JsonElement aResult : result) {
+                        JsonObject user = aResult.getAsJsonObject();
+                        roommates.add(new Roommate(user.get("name").getAsString(), user.get("status").getAsBoolean(), user.get("room").getAsString(), user.get("lastBeat").getAsLong()));
+                    }
+
+                    Collections.sort(roommates, new Roommate.RoommateComparator());
+
+                    recyclerView.setAdapter(new RoommateAdapter(roommates));
+                    flippy.setDisplayedChild(1);
+                    swipeLayout.setRefreshing(false);
+                }
+            }
+        });
     }
 
+    @Override
+    public void onRefresh() {
+        handy.post(runnable);
+    }
 }

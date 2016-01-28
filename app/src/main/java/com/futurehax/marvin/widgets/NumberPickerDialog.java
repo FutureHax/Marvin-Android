@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.futurehax.marvin;
+package com.futurehax.marvin.widgets;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,6 +23,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import com.futurehax.marvin.receivers.OnNumberSetListener;
+import com.futurehax.marvin.R;
 
 
 public class NumberPickerDialog extends DialogFragment implements DialogInterface.OnClickListener {

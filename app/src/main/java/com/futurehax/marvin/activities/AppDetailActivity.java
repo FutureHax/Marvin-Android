@@ -3,7 +3,6 @@ package com.futurehax.marvin.activities;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.futurehax.marvin.DBAdapter;
+import com.futurehax.marvin.adapters.DBAdapter;
 import com.futurehax.marvin.R;
 import com.futurehax.marvin.fragments.AppSettingsFragment;
 import com.futurehax.marvin.models.InterestingApp;
@@ -35,11 +34,9 @@ public class AppDetailActivity extends AppCompatActivity {
         setContentView(R.layout.app_list_detail);
 
         app = getIntent().getParcelableExtra("app");
-        setTitle(app.getAppName());
         appIcon = (ImageView) findViewById(R.id.app_icon);
         appName = (TextView) findViewById(R.id.app_name);
         enableSwitch = (Switch) findViewById(R.id.enable_switch);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.content, AppSettingsFragment.newInstance(app), "pref").commit();
         findViewById(R.id.header).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,6 +47,9 @@ public class AppDetailActivity extends AppCompatActivity {
         db.open();
 
         setAppDetailsActionBar();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, AppSettingsFragment.newInstance(app), "pref").commit();
+
     }
 
     @Override

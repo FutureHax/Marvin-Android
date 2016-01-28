@@ -1,1 +1,59 @@
-{"project_info":{"project_id":"marvin-b499c","project_number":"507867051475","name":"Marvin"},"client":[{"client_info":{"mobilesdk_app_id":"1:507867051475:android:8e69444393b1a485","client_id":"android:com.futurehax.marvin","client_type":1,"android_client_info":{"package_name":"com.futurehax.marvin"}},"oauth_client":[],"api_key":[],"services":{"analytics_service":{"status":1},"cloud_messaging_service":{"status":2,"apns_config":[]},"appinvite_service":{"status":1,"other_platform_oauth_client":[]},"google_signin_service":{"status":1},"ads_service":{"status":1}}}],"client_info":[],"ARTIFACT_VERSION":"1"}
+{
+  "project_info": {
+    "project_id": "marvin-b499c",
+    "project_number": "507867051475",
+    "name": "Marvin-App"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507867051475:android:8e69444393b1a485",
+        "client_id": "android:com.futurehax.marvin",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.futurehax.marvin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "507867051475-n7trlgqbmkctjo2e17rq21e8v80ujqgg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.futurehax.marvin",
+            "certificate_hash": "F8910430C6486ECEA206FF824575506ECCF5A899"
+          }
+        },
+        {
+          "client_id": "507867051475-huv4j9vclc60e7ebrng1ogs4448autms.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.futurehax.marvin",
+            "certificate_hash": "284C5EEC63ADF364767083BCEC63D4170E366C86"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

@@ -5,8 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ViewFlipper;
 
-import com.futurehax.marvin.PreferencesProvider;
-import com.futurehax.marvin.UrlGenerator;
+import com.futurehax.marvin.manager.PreferencesProvider;
 
 /**
  * Created by FutureHax on 10/16/15.

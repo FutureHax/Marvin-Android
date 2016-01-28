@@ -1,8 +1,9 @@
-package com.futurehax.marvin;
+package com.futurehax.marvin.manager;
 
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+
 import com.futurehax.marvin.api.ToggleRoomTask;
 
 public class MyWidgetProvider extends AppWidgetProvider {

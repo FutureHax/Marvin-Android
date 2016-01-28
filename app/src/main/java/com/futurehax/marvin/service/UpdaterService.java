@@ -12,9 +12,9 @@ import android.os.IBinder;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
-import com.futurehax.marvin.PreferencesProvider;
+import com.futurehax.marvin.manager.PreferencesProvider;
 import com.futurehax.marvin.R;
-import com.futurehax.marvin.UrlGenerator;
+import com.futurehax.marvin.api.UrlGenerator;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -37,7 +37,7 @@ public class UpdaterService extends IntentService {
 
         UrlGenerator urlGenerator = new UrlGenerator(UpdaterService.this);
         try {
-            String attempt = urlGenerator.getRequest(urlGenerator.generate(UrlGenerator.VERSION));
+            String attempt = urlGenerator.getBlockingRequestWithJson(urlGenerator.generate(UrlGenerator.VERSION));
             if (attempt != null) {
                 handleResponse(new JsonParser().parse(attempt).getAsJsonObject());
             }

@@ -1,50 +1,44 @@
-package com.futurehax.marvin;
+package com.futurehax.marvin.adapters;
 
-import android.content.DialogInterface;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.futurehax.marvin.models.BeaconIdentifier;
-import com.futurehax.marvin.models.Roommate;
-import com.futurehax.marvin.models.UberBeacon;
+import com.futurehax.marvin.R;
+import com.futurehax.marvin.models.AttachedDevice;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by FutureHax on 10/13/15.
  */
-public class BeaconsForRoomAdapter extends RecyclerView.Adapter<BeaconsForRoomAdapter.BeaconViewHolder> implements HeaderRecyclerViewAdapterV1.FooterRecyclerView {
+public class AttachedDevicesForRoomAdapter extends RecyclerView.Adapter<AttachedDevicesForRoomAdapter.DeviceViewHolder> implements HeaderRecyclerViewAdapterV1.FooterRecyclerView {
 
-    ArrayList<BeaconIdentifier> beacons;
+    ArrayList<AttachedDevice> attachedDevices;
     View.OnClickListener listener;
 
-    public BeaconsForRoomAdapter(ArrayList<BeaconIdentifier> beacons, View.OnClickListener listener) {
-        this.beacons = beacons;
+    public AttachedDevicesForRoomAdapter(ArrayList<AttachedDevice> beacons, View.OnClickListener listener) {
+        this.attachedDevices = beacons;
         this.listener = listener;
     }
 
     @Override
-    public BeaconViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.beacon_row, parent, false);
-        BeaconViewHolder vh = new BeaconViewHolder(v);
+    public DeviceViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.device_row, parent, false);
+        DeviceViewHolder vh = new DeviceViewHolder(v);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(BeaconViewHolder holder, int position) {
-        holder.beaconId.setText(beacons.get(position).mac);
+    public void onBindViewHolder(DeviceViewHolder holder, int position) {
+        holder.content.setText(String.format("%s : %s", attachedDevices.get(position).type, attachedDevices.get(position).name));
     }
 
     @Override
     public int getItemCount() {
-        return beacons.size();
+        return attachedDevices.size();
     }
 
     @Override
@@ -65,16 +59,16 @@ public class BeaconsForRoomAdapter extends RecyclerView.Adapter<BeaconsForRoomAd
         });
     }
 
-    public ArrayList<BeaconIdentifier> getItems() {
-        return beacons;
+    public ArrayList<AttachedDevice> getItems() {
+        return attachedDevices;
     }
 
-    public static class BeaconViewHolder extends RecyclerView.ViewHolder {
-        TextView beaconId;
+    public static class DeviceViewHolder extends RecyclerView.ViewHolder {
+        TextView content;
 
-        BeaconViewHolder(View itemView) {
+        DeviceViewHolder(View itemView) {
             super(itemView);
-            beaconId = (TextView) itemView.findViewById(R.id.beacon_id);
+            content = (TextView) itemView.findViewById(R.id.content);
         }
     }
 

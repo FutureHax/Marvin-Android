@@ -1,7 +1,6 @@
-package com.futurehax.marvin;
+package com.futurehax.marvin.manager;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.MacAddress;

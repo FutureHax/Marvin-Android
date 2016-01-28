@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.futurehax.marvin;
+package com.futurehax.marvin.widgets;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +23,9 @@ import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
+
+import com.futurehax.marvin.receivers.OnNumberSetListener;
+import com.futurehax.marvin.R;
 
 public class NumberPickerPreference extends Preference {
     private View mPreviewView;

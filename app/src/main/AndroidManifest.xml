@@ -38,10 +38,11 @@
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.AppDetailActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".activities.AppDetailActivity" />
+
+        <activity android:name=".activities.AddRoomActivity"/>
+
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -52,12 +53,12 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".BootReceiver">
+        <receiver android:name=".receivers.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".BluetoothStateReceiver">
+        <receiver android:name=".receivers.BluetoothStateReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
             </intent-filter>
@@ -73,7 +74,7 @@
             android:name=".service.HeartBeatService"
             android:exported="false"/>
 
-        <receiver android:name=".MyWidgetProvider">
+        <receiver android:name=".manager.MyWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -123,7 +124,6 @@
             android:enabled="true"
             android:exported="true"/>
 
-        <activity android:name=".activities.AddRoomActivity"/>
     </application>
 
 </manifest>

@@ -1,15 +1,12 @@
 package com.futurehax.marvin;
 
-import android.app.AlarmManager;
 import android.app.Application;
-import android.database.Cursor;
-import android.net.Uri;
 import android.provider.MediaStore;
-import android.provider.Settings;
-import android.util.Log;
 
 import com.estimote.sdk.EstimoteSDK;
 import com.futurehax.marvin.api.SaveRoomTask;
+import com.futurehax.marvin.manager.UberBeaconManager;
+import com.futurehax.marvin.manager.UberRoomManager;
 import com.futurehax.marvin.models.BeaconMap;
 import com.futurehax.marvin.models.UberRoom;
 import com.futurehax.marvin.service.AccelerometerListenerService;

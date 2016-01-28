@@ -15,7 +15,7 @@
             app:cal_itemLayout="@layout/calendar_grid_item_color"
             app:cal_numColumns="4" />
 
-        <com.futurehax.marvin.NumberPickerPreference
+        <com.futurehax.marvin.widgets.NumberPickerPreference
             android:defaultValue="3"
             android:persistent="false"
             android:key="number_picker_key"

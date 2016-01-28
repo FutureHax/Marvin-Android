@@ -2,25 +2,17 @@ package com.futurehax.marvin.api;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.support.v7.widget.RecyclerView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
-import com.futurehax.marvin.RoommateAdapter;
-import com.futurehax.marvin.UrlGenerator;
 import com.futurehax.marvin.models.AttachedDevice;
-import com.futurehax.marvin.models.Roommate;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class GetAllDevicesTask extends BasicTask {
 
@@ -38,17 +30,23 @@ public class GetAllDevicesTask extends BasicTask {
     @Override
         protected String doInBackground(Void... params) {
             try {
-                String attempt = mUrlGenerator.getRequest(mUrlGenerator.generate(UrlGenerator.DEVICES));
+                String attempt = mUrlGenerator.getBlockingRequestWithJson(mUrlGenerator.generate(UrlGenerator.DEVICES));
                 return attempt == null ? "Failed" : attempt;
-            } catch (Exception e) {
+            } catch (IllegalStateException e) {
                 return "Failed";
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             }
-        }
+        return "Failed";
+
+    }
 
 
         @Override
         protected void onPostExecute(final String success) {
-            if (!success.equals("Failed")) {
+            if (!success.equals("Failed") && !success.equals("Unauthorized")) {
                 try {
                     JsonObject o = new JsonParser().parse(success).getAsJsonObject();
 

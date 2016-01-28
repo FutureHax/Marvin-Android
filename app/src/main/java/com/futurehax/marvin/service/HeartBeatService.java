@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.futurehax.marvin.PreferencesProvider;
-import com.futurehax.marvin.UberBeaconManager;
-import com.futurehax.marvin.UberEstimoteApplication;
-import com.futurehax.marvin.UrlGenerator;
-import com.futurehax.marvin.gitignore.Constants;
+import com.futurehax.marvin.manager.PreferencesProvider;
+import com.futurehax.marvin.manager.UberBeaconManager;
+import com.futurehax.marvin.api.UrlGenerator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +35,7 @@ public class HeartBeatService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         PreferencesProvider p = new PreferencesProvider(this);
-        if (p.getName() == null) {
+        if (p.getName() == null || p.getToken() == null) {
             return;
         }
 
@@ -54,15 +52,15 @@ public class HeartBeatService extends IntentService {
             data.put("email", p.getEmail());
             data.put("profile_id", p.getId());
             data.put("gcm", p.getToken());
-            data.put("token", Constants.TOKEN);
             data.put("status", status);
             data.put("room", p.getCurrentRoom() != null ? p.getCurrentRoom().roomName : "Unknown");
+            data.put("enable_tracking", p.getHasTrackingEnabled());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            String attempt = urlGenerator.getRequestWithJson(urlGenerator.generate(UrlGenerator.HEARTBEAT), data);
+            String attempt = urlGenerator.getBlockingRequestWithJson(urlGenerator.generate(UrlGenerator.HEARTBEAT), data);
             Log.d("HEARTBEAT", attempt == null ? "Failed" : attempt + " : " + data.toString(1));
         } catch (Exception e) {
             e.printStackTrace();

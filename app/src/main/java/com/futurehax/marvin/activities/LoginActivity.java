@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ViewFlipper;
 
-import com.futurehax.marvin.PreferencesProvider;
+import com.futurehax.marvin.manager.PreferencesProvider;
 import com.futurehax.marvin.R;
 import com.futurehax.marvin.api.AuthenticateTask;
 import com.futurehax.marvin.google_api.GoogleApiProvider;
@@ -35,7 +35,7 @@ public class LoginActivity extends PermisoActivity implements ILoginAttempt {
     private SignInButton btnSignIn;
     GoogleApiProvider mGoogleApiProvider;
     int failCount = 0;
-    boolean hasPerms = false;
+
 
     protected void onStop() {
         super.onStop();
@@ -66,10 +66,10 @@ public class LoginActivity extends PermisoActivity implements ILoginAttempt {
         Permiso.getInstance().requestPermissions(new Permiso.IOnPermissionResult() {
                                                      @Override
                                                      public void onPermissionResult(Permiso.ResultSet resultSet) {
-                                                         if (resultSet.areAllPermissionsGranted()) {
-                                                             handleGivenPermissions();
-                                                         } else {
+                                                         if (!resultSet.areAllPermissionsGranted()) {
                                                              showUnable();
+                                                         } else {
+                                                             startService(new Intent(LoginActivity.this, RegistrationIntentService.class));
                                                          }
                                                      }
 
@@ -84,14 +84,12 @@ public class LoginActivity extends PermisoActivity implements ILoginAttempt {
 
     }
 
-    private void handleGivenPermissions() {
-        startService(new Intent(this, RegistrationIntentService.class));
-    }
-
     protected void onStart() {
         super.onStart();
-        if (new PreferencesProvider(this).getTokenIsSent() && hasPerms) {
+        if (new PreferencesProvider(this).getTokenIsSent()) {
             mGoogleApiProvider.signIn(LoginActivity.this, LoginActivity.this);
+        } else {
+            flippy.setDisplayedChild(0);
         }
     }
 
@@ -122,7 +120,7 @@ public class LoginActivity extends PermisoActivity implements ILoginAttempt {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(RegistrationIntentService.REGISTRATION_COMPLETE)) {
-                mGoogleApiProvider.signIn(LoginActivity.this, LoginActivity.this);
+//                mGoogleApiProvider.signIn(LoginActivity.this, LoginActivity.this);
             } else {
                 showUnable();
             }

@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ViewFlipper;
 
 import com.futurehax.marvin.R;
-import com.futurehax.marvin.UberRoomAdapter;
 import com.futurehax.marvin.activities.AddRoomActivity;
-import com.futurehax.marvin.api.GetAllRoomsTask;
+import com.futurehax.marvin.adapters.UberRoomAdapter;
+import com.futurehax.marvin.manager.UberRoomManager;
 import com.futurehax.marvin.models.UberRoom;
 
 import java.util.ArrayList;
@@ -39,29 +39,21 @@ public class BeaconSetupFragment extends Fragment {
     public void setupRecyclerView() {
         recyclerView = (RecyclerView) root.findViewById(R.id.rv);
 
-        new GetAllRoomsTask(getActivity(), new GetAllRoomsTask.IGetAllRoomsTask() {
+        flippy.setDisplayedChild(1);
+        ArrayList<UberRoom> rooms = UberRoomManager.getInstance(getContext()).getRooms();
+        adapter = new UberRoomAdapter(rooms, new View.OnClickListener() {
             @Override
-            public void onRoomsFetched(ArrayList<UberRoom> rooms) {
-                flippy.setDisplayedChild(1);
-
-                if (rooms != null) {
-                    adapter = new UberRoomAdapter(rooms, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Log.d("THE TAG", v.getTag().toString());
-                            Intent i = new Intent(v.getContext(), AddRoomActivity.class);
-                            i.putExtra("data", ((UberRoom) v.getTag()));
-                            getActivity().startActivityForResult(i, 1);
-                        }
-                    });
-                    recyclerView.setHasFixedSize(true);
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
-
-                    recyclerView.setLayoutManager(layoutManager);
-                    recyclerView.setAdapter(adapter);
-                }
+            public void onClick(View v) {
+                Log.d("THE TAG", v.getTag().toString());
+                Intent i = new Intent(v.getContext(), AddRoomActivity.class);
+                i.putExtra("data", ((UberRoom) v.getTag()));
+                getActivity().startActivityForResult(i, 1);
             }
-        }).execute();
+        });
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
 
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
     }
 }

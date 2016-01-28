@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import com.futurehax.marvin.UrlGenerator;
-import com.futurehax.marvin.gitignore.Constants;
 import com.futurehax.marvin.models.AttachedDevice;
 import com.futurehax.marvin.models.BeaconIdentifier;
 import com.futurehax.marvin.models.UberRoom;
@@ -13,6 +11,8 @@ import com.futurehax.marvin.models.UberRoom;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 public class SaveRoomTask extends BasicTask {
     UberRoom room;
@@ -29,7 +29,6 @@ public class SaveRoomTask extends BasicTask {
         JSONObject data = new JSONObject();
 
         try {
-            data.put("token", Constants.TOKEN);
             data.put("name", room.roomName);
             JSONArray devicesArray = new JSONArray();
             for (AttachedDevice device : room.devices) {
@@ -49,15 +48,15 @@ public class SaveRoomTask extends BasicTask {
                 beaconArray.put(deviceData);
             }
             data.put("beacons", beaconArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        try {
-            String attempt = urlGenerator.getRequestWithJson(urlGenerator.generate(UrlGenerator.ADD_ROOM), data);
+            String attempt = urlGenerator.getBlockingRequestWithJson(urlGenerator.generate(UrlGenerator.ADD_ROOM), data);
             Log.d("ADD ROOM", attempt == null ? "Failed" : attempt + " : " + data.toString(1));
-            return attempt;
-        } catch (Exception e) {
+            return attempt == null ? "Failed" : attempt;
+        } catch (IllegalStateException | JSONException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
@@ -66,8 +65,7 @@ public class SaveRoomTask extends BasicTask {
 
     @Override
     protected void onPostExecute(final String success) {
-        if (success != null &&
-                !success.equals("Failed")) {
+        if (!success.equals("Failed") && !success.equals("Unauthorized")) {
             if (mContext instanceof Activity) {
                 ((Activity) mContext).finish();
             }

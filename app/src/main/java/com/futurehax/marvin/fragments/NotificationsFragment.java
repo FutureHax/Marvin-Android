@@ -9,11 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ViewFlipper;
-import android.widget.ViewSwitcher;
 
-import com.futurehax.marvin.ApkAdapter;
-import com.futurehax.marvin.DBAdapter;
-import com.futurehax.marvin.PreferencesProvider;
+import com.futurehax.marvin.adapters.ApkAdapter;
+import com.futurehax.marvin.adapters.DBAdapter;
+import com.futurehax.marvin.manager.PreferencesProvider;
 import com.futurehax.marvin.R;
 import com.futurehax.marvin.activities.AppDetailActivity;
 import com.futurehax.marvin.models.InterestingApp;

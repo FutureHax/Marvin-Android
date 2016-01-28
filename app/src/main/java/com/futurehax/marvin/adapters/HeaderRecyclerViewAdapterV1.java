@@ -1,4 +1,4 @@
-package com.futurehax.marvin;/*
+package com.futurehax.marvin.adapters;/*
  * Copyright (C) 2014 sebnapi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

@@ -1,20 +1,14 @@
 package com.futurehax.marvin.service;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.futurehax.marvin.PreferencesProvider;
+import com.futurehax.marvin.manager.PreferencesProvider;
 import com.futurehax.marvin.R;
-import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-
-import java.io.IOException;
 
 /**
  * Created by FutureHax on 10/21/15.

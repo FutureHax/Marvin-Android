@@ -7,7 +7,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import com.futurehax.marvin.UrlGenerator;
+import java.util.concurrent.ExecutionException;
 
 public class CheckLogTask extends BasicTask {
 
@@ -23,16 +23,21 @@ public class CheckLogTask extends BasicTask {
     @Override
     protected String doInBackground(Void... params) {
         try {
-            String attempt = mUrlGenerator.getRequest(mUrlGenerator.generate(UrlGenerator.LOG, Integer.toString(mCount)));
-            return attempt == null ? "false" : attempt.trim();
-        } catch (Exception e) {
+            String attempt = mUrlGenerator.getBlockingRequestWithJson(mUrlGenerator.generate(UrlGenerator.LOG, Integer.toString(mCount)));
+            return attempt == null ? "Failed" : attempt.trim();
+        } catch (IllegalStateException e) {
             return "Failed";
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
+        return "Failed";
     }
 
     @Override
     protected void onPostExecute(final String success) {
-        if (!success.equals("false")) {
+        if (!success.equals("Failed") && !success.equals("Unauthorized")) {
             Log.d("THE SERVER LOG", success);
 
             final ScrollView sv = (ScrollView) mTextView.getParent();

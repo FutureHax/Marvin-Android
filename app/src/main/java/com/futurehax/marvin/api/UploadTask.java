@@ -2,8 +2,6 @@ package com.futurehax.marvin.api;
 
 import android.content.Context;
 
-import com.futurehax.marvin.UrlGenerator;
-
 import java.io.File;
 
 /**
@@ -23,7 +21,7 @@ public class UploadTask extends BasicTask {
         try {
             String attempt = mUrlGenerator.getUploadRequest(mUrlGenerator.generate(UrlGenerator.UPLOAD), toUpload);
             return attempt == null ? "Failed" : attempt;
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             return "Failed";
         }
 
@@ -32,7 +30,7 @@ public class UploadTask extends BasicTask {
 
     @Override
     protected void onPostExecute(final String success) {
-        if (success.equals("OK")) {
+        if (!success.equals("Failed") && !success.equals("Unauthorized")) {
             mPreferences.setImageUploaded(toUpload, true);
         } else {
             mPreferences.setImageUploaded(toUpload, false);

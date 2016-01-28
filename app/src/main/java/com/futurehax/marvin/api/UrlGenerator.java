@@ -1,14 +1,15 @@
-package com.futurehax.marvin;
+package com.futurehax.marvin.api;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.futurehax.marvin.gitignore.Constants;
+import com.futurehax.marvin.manager.PreferencesProvider;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.builder.Builders;
+import com.koushikdutta.ion.future.ResponseFuture;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -31,7 +32,8 @@ public class UrlGenerator {
     public static final String ADD_ROOM_PATH = "/addRoom/";
     public static final String GET_ROOM_PATH = "/getRooms/";
     public static final String TOGGLE_PATH = "/toggle/";
-    
+    public static final String GOOGLE_AUTH_PATH = "/gauth";
+
     public static final int CHECK = 0;
     public static final int REGISTER = 1;
     public static final int VERSION = 2;
@@ -44,6 +46,7 @@ public class UrlGenerator {
     public static final int ADD_ROOM = 9;
     public static final int ROOMS = 10;
     public static final int TOGGLE = 11;
+    public static final int GOOGLE_AUTH = 12;
 
     private final Context context;
 
@@ -51,15 +54,15 @@ public class UrlGenerator {
         this.context = context;
     }
 
-    public String generate(int opt, String... args) throws Exception {
+    public String generate(int opt, String... args) throws IllegalStateException {
         String host = new PreferencesProvider(context).getHost();
         if (host == null) {
-            throw new Exception("Host not provided");
+            throw new IllegalStateException("Host not provided");
         }
 //        String host = (remote ? MARVIN_LOCAL_HOST : MARVIN_REMOTE_HOST);
         switch (opt) {
             case CHECK:
-                return  host + CHECK_PATH + args[0];
+                return host + CHECK_PATH + args[0];
             case REGISTER:
                 return host + REGISTER_PATH;
             case VERSION:
@@ -86,6 +89,8 @@ public class UrlGenerator {
                 return host + ADD_ROOM_PATH;
             case ROOMS:
                 return host + GET_ROOM_PATH;
+            case GOOGLE_AUTH:
+                return host + GOOGLE_AUTH_PATH;
         }
 
         return null;
@@ -98,7 +103,6 @@ public class UrlGenerator {
         Builders.Any.M builder = Ion.with(context)
                 .load(url)
                 .addHeader("Cache-Control", Boolean.toString(false))
-                .addHeader("x-access-token", Constants.TOKEN)
                 .setTimeout(15000)
                 .setMultipartParameter("uploader", new PreferencesProvider(context).getId())
                 .setMultipartFile("photo", f);
@@ -106,53 +110,69 @@ public class UrlGenerator {
         try {
             return builder
                     .asString().get();
-        } catch (Exception e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public String getRequest(String url, String... args) {
-        if (!url.contains("http")) {
-            url = "http://" + url;
-        }
-        Builders.Any.B builder = Ion.with(context)
-                .load(url)
-                .addHeader("Cache-Control", Boolean.toString(false))
-                .addHeader("x-access-token", Constants.TOKEN)
-                .setTimeout(15000);
-
-        for (String arg : args) {
-            String value = arg.split("&")[0];
-            String name = arg.split("&")[1];
-            builder.setBodyParameter(name, value);
+    public ResponseFuture<String> getRequestWithJson(String url, JSONObject json) {
+        if (json == null) {
+            json = new JSONObject();
         }
 
         try {
-            return builder
-                    .asString().get();
-        } catch (Exception e) {
-            Log.e(url, e.getMessage());
-        }
-        return null;
-    }
-
-    public String getRequestWithJson(String url, JSONObject json) {
-        if (!url.contains("http")) {
-            url = "http://" + url;
-        }
-        Builders.Any.B builder = Ion.with(context)
-                .load(url)
-                .setTimeout(2000);
-
-        builder.setJsonObjectBody((JsonObject)new JsonParser().parse(json.toString()));
-
-        try {
-            return builder
-                    .asString().get();
-        } catch (Exception e) {
+            json.put("id_token", new PreferencesProvider(context).getGoogleAuthToken());
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        return null;
+
+
+        if (!url.contains("http")) {
+                url = "http://" + url;
+            }
+            Builders.Any.B builder = Ion.with(context)
+                    .load(url)
+                    .setTimeout(5000);
+
+            builder.setJsonObjectBody((JsonObject) new JsonParser().parse(json.toString()));
+
+
+            return builder
+                    .asString();
+    }
+
+    public ResponseFuture<String> getRequestWithJson(String url) {
+        return getRequestWithJson(url, null);
+    }
+
+    public String getBlockingRequestWithJson(String url, JSONObject json) throws ExecutionException, InterruptedException {
+        if (json == null) {
+            json = new JSONObject();
+        }
+
+        try {
+            json.put("id_token", new PreferencesProvider(context).getGoogleAuthToken());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        if (!url.contains("http")) {
+            url = "http://" + url;
+        }
+        Builders.Any.B builder = Ion.with(context)
+                .load(url)
+                .setTimeout(5000);
+
+        builder.setJsonObjectBody((JsonObject) new JsonParser().parse(json.toString()));
+
+
+        return builder
+                .asString().get();
+    }
+
+    public String getBlockingRequestWithJson(String url) throws ExecutionException, InterruptedException {
+        return getBlockingRequestWithJson(url, null);
     }
 }

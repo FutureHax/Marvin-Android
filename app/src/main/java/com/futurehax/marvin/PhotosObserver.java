@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 
 import com.futurehax.marvin.api.UploadTask;
+import com.futurehax.marvin.manager.PreferencesProvider;
 
 import java.io.File;
 
@@ -51,21 +52,22 @@ class PhotosObserver extends ContentObserver {
         Cursor cursor = context.getContentResolver().query(uri, null, null,
                 null, "date_added DESC");
         Media media = null;
-        if (cursor.moveToNext()) {
-            int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-            String filePath = cursor.getString(dataColumn);
-            int mimeTypeColumn = cursor
-                    .getColumnIndexOrThrow(MediaStore.MediaColumns.MIME_TYPE);
-            String mimeType = cursor.getString(mimeTypeColumn);
-            media = new Media(new File(filePath), mimeType);
+        if (cursor != null) {
+            if (cursor.moveToNext()) {
+                int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                String filePath = cursor.getString(dataColumn);
+                int mimeTypeColumn = cursor
+                        .getColumnIndexOrThrow(MediaStore.MediaColumns.MIME_TYPE);
+                String mimeType = cursor.getString(mimeTypeColumn);
+                media = new Media(new File(filePath), mimeType);
+            }
+            cursor.close();
         }
-        cursor.close();
         return media;
     }
 
     private class Media {
         private File file;
-        @SuppressWarnings("unused")
         private String type;
 
         public Media(File file, String type) {

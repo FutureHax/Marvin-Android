@@ -1,4 +1,4 @@
-package com.futurehax.marvin;
+package com.futurehax.marvin.adapters;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.futurehax.marvin.R;
 import com.futurehax.marvin.models.InterestingApp;
 
 import java.util.ArrayList;

@@ -11,9 +11,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.futurehax.marvin.AttachedDevicesForRoomAdapter;
-import com.futurehax.marvin.BeaconsForRoomAdapter;
-import com.futurehax.marvin.HeaderRecyclerViewAdapterV1;
+import com.futurehax.marvin.adapters.AttachedDevicesForRoomAdapter;
+import com.futurehax.marvin.adapters.BeaconsForRoomAdapter;
+import com.futurehax.marvin.adapters.HeaderRecyclerViewAdapterV1;
 import com.futurehax.marvin.R;
 import com.futurehax.marvin.api.GetAllDevicesTask;
 import com.futurehax.marvin.api.SaveRoomTask;
